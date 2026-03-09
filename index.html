@@ -7,32 +7,25 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
+    <main class="phone-screen">
+        <section class="form-card">
         <h1>Create Account</h1>
 
         <input type="text" id="username" placeholder="Username" />
         <input type="password" id="password" placeholder="Enter Password" />
 
-        <div class="strenght-box">
-            <p id ="strenghtText">Password Strenght: None</p>
-            <div class="meter">
-                <div id="meterFill"></div>
-            </div>
-            <p id="feedback"></p>
-        </div>
-    
-        <div class="requirements">
-            <p id="lengthReq"> At least 8 characters </p>
-            <p id="caseReq"> includes uppercase & lowercase </p>
-            <p id="numberReq"> Includes a number </p>
-            <p id="symbolReq"> Includes a symbol </p>
-        </div>
+        <p id="passwordMessage" class="hidden">
+            Your password must be atleast 8, characters long 
+            and include a number, an uppercase letter, a lower case letter and a symbol.
+        </p>
 
-        <button id="continueBtn">Sign Up</button>
 
-    </div>
 
-    
+        <button id="signUpBtn">Sign Up</button>
+        </section>
+    </main>
+<script src="script.js"></script>
+
 </body>
 
 </html>
