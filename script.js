@@ -37,20 +37,10 @@ function isValidPassword(password) {
 }
 
 signUpBtn.addEventListener("click", function () {
+
+    console.log("button clicked");
     const username = usernameInput.value.trim();
     const passwordValue = passwordInput.value;
-
-    const result = zxcvbn(passwordValue, [username]); 
-    const crackTime = result.crack_times_display.offline_slow_hashing_1e4_per_second;
-
-    const lowerPassword = passwordValue.toLowerCase();
-    const lowerUsername = username.toLowerCase();
-
-    const patternName = lowerUsername && lowerPassword.includes(lowerUsername) ? 1 : 0;
-    const patternYear = /(19\d{2}|20\d{2})/.test(passwordValue) ? 1 : 0;
-    const patternSequence = /(123|1234|abc|qwerty)/i.test(passwordValue) ? 1 : 0;
-
-    const timeTaken = Math.round((Date.now () - startTime) / 1000);
 
     if (!username) {
         usernameInput.focus();
@@ -66,7 +56,21 @@ signUpBtn.addEventListener("click", function () {
     } else {
         passwordInput.classList.remove("error");
         passwordMessage.classList.add("hidden");
+
     }
+    
+    const lowerPassword = (passwordValue || "").toLowerCase();
+    const lowerUsername = (username || "").toLowerCase();
+
+    const patternName = lowerUsername !== "" && lowerPassword.includes(lowerUsername) ? 1 : 0;
+    const patternYear = /(19\d{2}|20\d{2})/.test(passwordValue) ? 1 : 0;
+    const patternSequence = /(123|1234|abc|qwerty)/i.test(passwordValue) ? 1 : 0;
+
+    const timeTaken = Math.round((Date.now () - startTime) / 1000);
+
+    const result = zxcvbn(passwordValue, [username]); 
+    const crackTime = result.crack_times_display.offline_slow_hashing_1e4_per_second;
+
     submitToGoogleForm({
         participantID: username,
         passwordLength: passwordValue.length,
