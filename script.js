@@ -5,7 +5,6 @@ const signUpBtn = document.getElementById("signUpBtn");
 
 const startTime = Date.now();
 let failedAttempts = 0;
-let messageShowedn = 0;
 
 function submitToGoogleForm(data) {
     fetch("https://docs.google.com/forms/d/e/1FAIpQLSf9f6Ddp7Q17XgFfwefPYaiX0ZdBATKhtH5ZyqGTZYUrBEhcg/formResponse", {
@@ -41,12 +40,15 @@ signUpBtn.addEventListener("click", function () {
     const username = usernameInput.value.trim();
     const passwordValue = passwordInput.value;
 
-    const lowerPassword = password.toLowerCase;
-    const lowerUsername = username.toLowerCase;
+    const result = zxcvbn(passwordValue, [username]); 
+    const crackTime = result.crack_times_display.offline_slow_hashing_1e4_per_second;
+
+    const lowerPassword = passwordValue.toLowerCase();
+    const lowerUsername = username.toLowerCase();
 
     const patternName = lowerUsername && lowerPassword.includes(lowerUsername) ? 1 : 0;
-    const patternYear = /(19\d{2}|20\d{2})/.test(password) ? 1 : 0;
-    const patternSequence = /(123|1234|abc|qwerty)/i.test(password) ? 1 : 0;
+    const patternYear = /(19\d{2}|20\d{2})/.test(passwordValue) ? 1 : 0;
+    const patternSequence = /(123|1234|abc|qwerty)/i.test(passwordValue) ? 1 : 0;
 
     const timeTaken = Math.round((Date.now () - startTime) / 1000);
 
@@ -55,6 +57,7 @@ signUpBtn.addEventListener("click", function () {
         return;
     }
     if (!isValidPassword(passwordValue)) {
+        failedAttempts++;
         passwordInput.classList.add("error");
         passwordMessage.classList.remove("hidden");
         passwordInput.focus();
@@ -63,11 +66,10 @@ signUpBtn.addEventListener("click", function () {
     } else {
         passwordInput.classList.remove("error");
         passwordMessage.classList.add("hidden");
-        alert("Password accepted");
     }
     submitToGoogleForm({
         participantID: username,
-        passwordLength: password.length,
+        passwordLength: passwordValue.length,
         score: result.score,
         crackTime: crackTime,
         patternName : patternName,
